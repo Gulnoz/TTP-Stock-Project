@@ -1,17 +1,22 @@
 import React from "react";
 
 import LoginForm from "../LoginForm/loginForm.component";
+import SignUpForm from "../LoginForm/signUpForm.component";
 
-class Auth extends React.Component {
-  constructor() {
-    super();
-    this.state = {
+class Login extends React.Component {
+  
+    state = {
       email: "",
       password: "",
-      errorMessage: null
+      errorMessage: null,
+      login: true,
     };
-
-    this.handleSubmit = (event, data) => {
+    signUpHendler = () => {
+     this.setState({
+       login: false,
+     })
+    }
+    handleSubmit = (event, data) => {
       event.preventDefault();
       const { email, password } = data;
       fetch("http://localhost:3000/login", {
@@ -43,9 +48,17 @@ class Auth extends React.Component {
         })
         .catch();
     };
-  }
+ 
   render() {
-    return <LoginForm errorMessage={this.state.errorMessage} handleSubmit={this.handleSubmit} submitButtonText={"Log In"}/>;
+    return (
+    <>
+        {this.state.login ?
+          <LoginForm signUpHendler={this.signUpHendler} errorMessage={this.state.errorMessage} handleSubmit={this.handleSubmit} submitButtonText={"Log In"}/>
+    : <SignUpForm signUpHendler={this.signUpHendler}/>
+        }
+   </>
+    )
+    
   }
 }
-export default Auth;
+export default Login;

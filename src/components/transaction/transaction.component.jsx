@@ -1,5 +1,4 @@
 import React from "react";
-import Nav from "../Nav/nav.component";
 
 export const Transactions = props => {
   let transaction = {};
@@ -12,7 +11,7 @@ export const Transactions = props => {
   }
   return (
     <div>
-      <Nav />
+      
       <table className="table table-hover">
         <tbody>
           {transaction.map(item => {

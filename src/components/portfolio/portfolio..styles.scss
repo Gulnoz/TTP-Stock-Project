@@ -1,24 +1,36 @@
-.portfolio {
-  table {
-    border: none;
-    border-collapse: collapse;
+
+  .portfolio{
+    padding-top: 60px;
+    display: flex;
+    justify-content: space-evenly;
+    width: 100%;
+  }
+  
+  .main-tbl {
+    // border-collapse: collapse;
     text-align: center;
   }
-  table td {
-    border-left: 1px solid #000;
+.portfolio > div{
+padding: 0px 50px;
+width: 400px;
+}
+  .main-tbl td {
+    // border-left: 1px solid #000;
     border-right: 1px solid #000;
     border-top: none;
+    width: 400px;
+   
   }
 
-  table td:first-child {
-    border-left: none;
-  }
+//   table td:first-child {
+//     border-left: none;
+//   }
 
-  table td:last-child {
-    border-right: none;
-  }
-}
-#table-portfolio table td{
-    border-left: none;
-    border-right: none;
-}
+//   table td:last-child {
+//     border-right: none;
+//   }
+
+// #table-portfolio table td{
+//     border-left: none;
+//     border-right: none;
+// }

@@ -1,43 +1,50 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom";
 import HomePage from "./Pages/homepage/homepage.component";
-import Auth from "./components/Auth/auth.component";
+import Login from "./components/Auth/login.component";
 import { Redirect } from "react-router-dom";
 import { Transactions } from "./components/transaction/transaction.component";
 import Portfolio from './components/portfolio/portfolio.component';
-
+import Nav from "./components/Nav/nav.component";
 class App extends React.Component {
-  constructor() {
-    super();
-    this.state = {
+
+    state = {
       user: null
     };
 
-    this.setUser = props => (
-       this.setState({ user: props }));
+    setUser = (user) => {
+      this.setState({ user: user });
+    }
+      
+  
+  logOutHendler=()=>{
+    this.setState({ user: null });
   }
   componentWillMount() {
     //console.log('test')
     if (localStorage.getItem("currentUserToken")) {
       //console.log(localStorage.getItem('currentUserToken'))
 
-      fetch("http://localhost:3000/auth", {
+  fetch("http://localhost:3000/auth", {
         method: "GET",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("currentUserToken")}`
         }
       })
-        .then(res => res.json())
+       .then(res => res.json())
         .then(user => {
           this.setState({ user: user.user.data });
           localStorage.clear();
           localStorage.setItem("currentUserToken", user.jwt)
-          console.log(this.state.user);
+           return < Portfolio logOutHendler = { this.logOutHendler }addStockTransaction = { this.addStockTransaction }user = { this.state.user }/>
+
         })
         .catch(console.log);
       //return { Authorization: `Bearer ${currentUser.token}` };
     } else {
       // return <UserContainer onChangeSelectHendler={this.onChangeSelectHendler} handleSubmit={this.handleSubmit} handleChange={this.handleChange} editEventNull={this.editEventNull} updateEventHendler={this.updateEventHendler} ref={this.createEventFormElement} createEventFormState={this.state.createEventFormState} addEventHendler={this.addEventHendler} popUpFavoriteHendler={this.popUpFavoriteHendler} favorits={this.state.favorits} userEvents={this.state.userEvents} currentUser={this.state.currentUser} setCurrentUser={this.setCurrentUser} categories={this.state.categories} setUserEvents={this.setUserEvents} />
+      return <Login setUser={this.setUser} />
+
     }
   }
   addStockTransaction=(stock)=>{
@@ -47,15 +54,19 @@ class App extends React.Component {
   }
   render() {
     return (
+      <>
+        <Nav history={this.props} logOutHendler={this.logOutHendler} />
+
       <Switch>
         <Route
           exact
           path="/"
           render={props =>
             !this.state.user ? (
-              <Redirect to="/login" />
+              // <Redirect to="/login" />
+              null
             ) : (
-                <Portfolio addStockTransaction={this.addStockTransaction}user={this.state.user} {...props} />
+                <Portfolio logOutHendler={this.logOutHendler}addStockTransaction={this.addStockTransaction}user={this.state.user} {...props} />
             )
           }
         />
@@ -65,9 +76,9 @@ class App extends React.Component {
           path="/Transactions"
           render={props =>
             !this.state.user ? (
-              <Redirect to="/login" />
+             null
             ) : (
-                <Transactions user={this.state.user}{...props} />
+                <Transactions logOutHendler={this.logOutHendler}user={this.state.user}{...props} />
             )
           }
         />
@@ -76,7 +87,7 @@ class App extends React.Component {
           path="/Login"
           render={props =>
             !this.state.user ? (
-              <Auth {...props} setUser={this.setUser}/>
+              <Login {...props} setUser={this.setUser}/>
             ) : (
               <Redirect to="/" />
             )
@@ -84,6 +95,7 @@ class App extends React.Component {
         />
         } />
       </Switch>
+      </>
     );
   }
 }
