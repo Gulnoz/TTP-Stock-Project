@@ -1,44 +1,42 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom";
-import HomePage from "./Pages/homepage/homepage.component";
-import Auth from "./components/Auth/auth.component";
+import Login from "./components/Auth/login.component";
 import { Redirect } from "react-router-dom";
 import { Transactions } from "./components/transaction/transaction.component";
 import Portfolio from './components/portfolio/portfolio.component';
-
+import Nav from "./components/Nav/nav.component";
 class App extends React.Component {
-  constructor() {
-    super();
-    this.state = {
+
+    state = {
       user: null
     };
 
-    this.setUser = props => (
-       this.setState({ user: props }));
+    setUser = (user) => {
+      this.setState({ user: user });
+    }
+      
+  
+  logOutHendler=()=>{
+    this.setState({ user: null });
   }
   componentWillMount() {
-    //console.log('test')
     if (localStorage.getItem("currentUserToken")) {
-      //console.log(localStorage.getItem('currentUserToken'))
-
       fetch("http://localhost:3000/auth", {
         method: "GET",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("currentUserToken")}`
         }
       })
-        .then(res => res.json())
-        .then(user => {
+      .then(res => res.json())
+      .then(user => {
           this.setState({ user: user.user.data });
           localStorage.clear();
           localStorage.setItem("currentUserToken", user.jwt)
-          console.log(this.state.user);
+          return < Portfolio logOutHendler = { this.logOutHendler }addStockTransaction = { this.addStockTransaction }user = { this.state.user }/>
+
         })
         .catch(console.log);
-      //return { Authorization: `Bearer ${currentUser.token}` };
-    } else {
-      // return <UserContainer onChangeSelectHendler={this.onChangeSelectHendler} handleSubmit={this.handleSubmit} handleChange={this.handleChange} editEventNull={this.editEventNull} updateEventHendler={this.updateEventHendler} ref={this.createEventFormElement} createEventFormState={this.state.createEventFormState} addEventHendler={this.addEventHendler} popUpFavoriteHendler={this.popUpFavoriteHendler} favorits={this.state.favorits} userEvents={this.state.userEvents} currentUser={this.state.currentUser} setCurrentUser={this.setCurrentUser} categories={this.state.categories} setUserEvents={this.setUserEvents} />
-    }
+    } else return <Login setUser={this.setUser} />
   }
   addStockTransaction=(stock)=>{
     let user=this.state.user;
@@ -47,28 +45,29 @@ class App extends React.Component {
   }
   render() {
     return (
+      <> {this.state.user?
+        <Nav history={this.props} logOutHendler={this.logOutHendler} />
+        :null}
       <Switch>
         <Route
           exact
           path="/"
           render={props =>
-            !this.state.user ? (
-              <Redirect to="/login" />
-            ) : (
-                <Portfolio addStockTransaction={this.addStockTransaction}user={this.state.user} {...props} />
-            )
-          }
+            !this.state.user 
+            ?
+            <Redirect to="/login" />
+            : <Portfolio logOutHendler={this.logOutHendler}addStockTransaction={this.addStockTransaction}user={this.state.user} {...props} />
+            }
         />
-        {/* <Route exact path="/" user={this.state} setUser={this.setUser} component={HomePage} /> */}
         <Route
           exact
           path="/Transactions"
           render={props =>
-            !this.state.user ? (
-              <Redirect to="/login" />
-            ) : (
-                <Transactions user={this.state.user}{...props} />
-            )
+            this.state.user ? (
+              (
+                <Transactions logOutHendler={this.logOutHendler} user={this.state.user}{...props} />
+              )
+            ) : <Redirect to="/login" />
           }
         />
          <Route
@@ -76,7 +75,7 @@ class App extends React.Component {
           path="/Login"
           render={props =>
             !this.state.user ? (
-              <Auth {...props} setUser={this.setUser}/>
+              <Login {...props} setUser={this.setUser}/>
             ) : (
               <Redirect to="/" />
             )
@@ -84,8 +83,8 @@ class App extends React.Component {
         />
         } />
       </Switch>
+      </>
     );
   }
 }
-
 export default App;

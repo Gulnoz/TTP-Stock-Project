@@ -5,9 +5,11 @@ import "bootstrap/dist/css/bootstrap.min.css";
 export const ReactForm = props => {
   const inputs = props.inputs;
   return (
-    <Form onSubmit={event => props.handleSubmit(event, props.state)}>
+    <Form onSubmit={event => {
+      props.handleSubmit(event, props.state)
+      }}>
       {inputs.map(input => (
-        <InputGroup key={input.id} className="mb-3">
+        <InputGroup key={input.name} className="mb-3">
           <InputGroup.Prepend>
             <InputGroup.Text
               style={{ backgroundColor: "black" }}
@@ -17,9 +19,9 @@ export const ReactForm = props => {
             </InputGroup.Text>
           </InputGroup.Prepend>
           <FormControl
-            id={input.id}
-            name={input.id}
+            name={input.name}
             type={input.type}
+            value={input.value}
             placeholder={input.placeholder}
             aria-label={input.ariaLabel}
             aria-describedby={input.inputGroupAddon}
