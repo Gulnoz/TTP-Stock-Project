@@ -85,6 +85,7 @@ class Portfolio extends React.Component {
     })
       .then(response => response.json())
       .then(portfolio => {
+        console.log(portfolio)
         if(portfolio.length>1){
           let sum = 0;
           portfolio.forEach(el => sum += el.price);
