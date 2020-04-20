@@ -16,13 +16,7 @@ class LoginForm extends React.Component {
       e.preventDefault();
       this.setState({ [e.target.name]: e.target.value });
     };
-  clearFormHendler=()=>{
-    // this.setState( {
-    //   email: "",
-    //   password: "",
-    //   errorMessage: null
-    // });
-  }
+
 
   render() {
     const inputs = [
@@ -53,7 +47,6 @@ class LoginForm extends React.Component {
       <div className="container loginForm">
         <div className="Absolute-Center is-Responsive">
           <ReactForm 
-            clearFormHendler={this.clearFormHendler}
           errorMessage={this.props.errorMessage} 
           handleSubmit={this.props.handleSubmit} 
           state={this.state} inputs={inputs} 

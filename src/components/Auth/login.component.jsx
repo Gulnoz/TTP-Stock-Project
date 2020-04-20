@@ -1,10 +1,8 @@
 import React from "react";
-
 import LoginForm from "../LoginForm/loginForm.component";
 import SignUpForm from "../LoginForm/signUpForm.component";
 
 class Login extends React.Component {
-  
     state = {
       email: "",
       password: "",
@@ -14,12 +12,14 @@ class Login extends React.Component {
     signUpShow = () => {
      this.setState({
        login: false,
+       email: "",
+       password: "",
+       errorMessage: null,
      })
     }
     handleSubmit = (event, data) => {
       event.preventDefault();
       const { email, password } = data;
-      console.log(data)
       fetch("http://localhost:3000/login", {
         method: "POST",
         body: JSON.stringify({
@@ -37,6 +37,7 @@ class Login extends React.Component {
               email: email,
               password: password
             });
+            
           } else {
             const { history } = this.props;
             const { user, jwt } = data;
@@ -44,16 +45,13 @@ class Login extends React.Component {
             this.props.setUser(user.data);
             history.push("/");
           }
-          //   users.push(data);
-          //   this.setState({ users: users });
         })
         .catch();
     };
   hendleSignUp = (event, data)=>{
-      event.preventDefault();
+    event.preventDefault();
     const { name, email, password, password2 } = data;
-      if(password===password2){
-    
+    if(password===password2){
     fetch('http://localhost:3000/users',
         {
           method: 'POST',
@@ -66,21 +64,25 @@ class Login extends React.Component {
         })
         .then(res => res.json())
       .then((data) => {
+        if(!data.error){
         const { history } = this.props;
         const { user, jwt } = data;
         localStorage.setItem("currentUserToken", jwt);
         this.props.setUser(user.data);
-        history.push("/");})
+        history.push("/");
+        }
+        else{
+          this.setState({
+            errorMessage: 'This email already exist.'
+          })
+        }
+      })
+      .catch();
       } else{
         this.setState({
           errorMessage: 'Password must match!',
-        })
-        
+        })  
       }
-
-    }
-    clearForm=()=>{
-
     }
     cencelHendler=()=>{
       this.setState({
@@ -93,17 +95,16 @@ class Login extends React.Component {
         {this.state.login ?
           <LoginForm 
             signUpShow={this.signUpShow}
-           errorMessage={this.state.errorMessage}
+            errorMessage={this.state.errorMessage}
             handleSubmit={this.handleSubmit} 
             submitButtonText={"Log In"}/>
           : <SignUpForm cencelHendler={this.cencelHendler}
-          errorMessage={this.state.errorMessage}
+            errorMessage={this.state.errorMessage}
             handleSubmit={this.hendleSignUp}
             submitButtonText={"Sign Up"}/>
         }
    </>
-    )
-    
+    ) 
   }
 }
 export default Login;
