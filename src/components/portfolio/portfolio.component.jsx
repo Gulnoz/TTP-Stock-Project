@@ -30,7 +30,6 @@ class Portfolio extends React.Component {
         .then(stock => {
           let price = parseFloat(stock['response'][0]['price']).toFixed(2);
           let change = parseFloat(stock['response'][0]['chg']).toFixed(2);
-          console.log(price)
           let newBalance = this.state.balance - price;
           if (newBalance > 0){
             this.setState({ balance: parseInt(newBalance) });
@@ -85,7 +84,6 @@ class Portfolio extends React.Component {
     })
       .then(response => response.json())
       .then(portfolio => {
-        console.log(portfolio)
         if(portfolio.length>1){
           let sum = 0;
           portfolio.forEach(el => sum += el.price);
