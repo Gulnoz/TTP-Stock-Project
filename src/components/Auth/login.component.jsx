@@ -11,7 +11,7 @@ class Login extends React.Component {
       errorMessage: null,
       login: true,
     };
-    signUpHendler = () => {
+    signUpShow = () => {
      this.setState({
        login: false,
      })
@@ -19,6 +19,7 @@ class Login extends React.Component {
     handleSubmit = (event, data) => {
       event.preventDefault();
       const { email, password } = data;
+      console.log(data)
       fetch("http://localhost:3000/login", {
         method: "POST",
         body: JSON.stringify({
@@ -48,13 +49,57 @@ class Login extends React.Component {
         })
         .catch();
     };
- 
+  hendleSignUp = (event, data)=>{
+      event.preventDefault();
+    const { name, email, password, password2 } = data;
+      if(password===password2){
+    
+    fetch('http://localhost:3000/users',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: name,
+            email: email,
+            password: password
+          })
+        })
+        .then(res => res.json())
+      .then((data) => {
+        const { history } = this.props;
+        const { user, jwt } = data;
+        localStorage.setItem("currentUserToken", jwt);
+        this.props.setUser(user.data);
+        history.push("/");})
+      } else{
+        this.setState({
+          errorMessage: 'Password must match!',
+        })
+        
+      }
+
+    }
+    clearForm=()=>{
+
+    }
+    cencelHendler=()=>{
+      this.setState({
+        login: true,
+      })
+    }
   render() {
     return (
     <>
         {this.state.login ?
-          <LoginForm signUpHendler={this.signUpHendler} errorMessage={this.state.errorMessage} handleSubmit={this.handleSubmit} submitButtonText={"Log In"}/>
-    : <SignUpForm signUpHendler={this.signUpHendler}/>
+          <LoginForm 
+            signUpShow={this.signUpShow}
+           errorMessage={this.state.errorMessage}
+            handleSubmit={this.handleSubmit} 
+            submitButtonText={"Log In"}/>
+          : <SignUpForm cencelHendler={this.cencelHendler}
+          errorMessage={this.state.errorMessage}
+            handleSubmit={this.hendleSignUp}
+            submitButtonText={"Sign Up"}/>
         }
    </>
     )

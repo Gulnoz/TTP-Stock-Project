@@ -3,25 +3,31 @@ import { ReactForm } from "../../components/form/form.component";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./loginForm.css";
 import { User, Key } from "react-feather";
+import { Button } from "react-bootstrap";
 
 class LoginForm extends React.Component {
-  constructor() {
-    super();
-    this.state = {
+  
+   state = {
       email: "",
       password: "",
       errorMessage: null
     };
-    this.inputChangeHandler = e => {
+    inputChangeHandler = e => {
       e.preventDefault();
-      this.setState({ [e.target.id]: e.target.value });
+      this.setState({ [e.target.name]: e.target.value });
     };
+  clearFormHendler=()=>{
+    // this.setState( {
+    //   email: "",
+    //   password: "",
+    //   errorMessage: null
+    // });
   }
 
   render() {
     const inputs = [
       {
-        id: "email",
+        name: "email",
         placeholder: "Enter email",
         type: "email",
         divClassName: "col-md-3",
@@ -32,7 +38,7 @@ class LoginForm extends React.Component {
         ariaLabel: "Email"
       },
       {
-        id: "password",
+        name: "password",
         placeholder: "Enter password",
         type: "password",
         divClassName: "col-md-3",
@@ -46,8 +52,21 @@ class LoginForm extends React.Component {
     return (
       <div className="container loginForm">
         <div className="Absolute-Center is-Responsive">
-          <ReactForm errorMessage={this.props.errorMessage} handleSubmit={this.props.handleSubmit} state={this.state} inputs={inputs} submitButtonText={this.props.submitButtonText}/>
+          <ReactForm 
+            clearFormHendler={this.clearFormHendler}
+          errorMessage={this.props.errorMessage} 
+          handleSubmit={this.props.handleSubmit} 
+          state={this.state} inputs={inputs} 
+          submitButtonText={this.props.submitButtonText}/>
+          
+          <Button type="submit" style={{ float: "right" }} variant="dark"
+           onClick={this.props.signUpShow}>
+            Sign Up
+          </Button>
         </div>
+        <div>
+       
+      </div>
       </div>
     );
   }

@@ -17,7 +17,7 @@ class Portfolio extends React.Component {
     
    inputChangeHandler = e => {
       e.preventDefault();
-      this.setState({ [e.target.id]: e.target.value });
+      this.setState({ [e.target.name]: e.target.value });
     };
     handleSubmit = (event, data) => {
       event.preventDefault();
@@ -47,10 +47,11 @@ class Portfolio extends React.Component {
                 console.log(responsePortfolio);
                 if (!responsePortfolio.error) {
                   this.props.addStockTransaction(responsePortfolio);
-                  let { portfolio } = this.state;
+                  let { portfolio, portfolioTotal } = this.state;
                   portfolio.push(responsePortfolio);
 
-                  var result = [];
+                  let result = [];
+                  let tickerPrice = responsePortfolio.price;
                   portfolio.reduce(function (res, value) {
                     if (!res[value.ticker]) {
                       res[value.ticker] = { ticker: value.ticker, qty: 0, price: 0.00 };
@@ -58,10 +59,13 @@ class Portfolio extends React.Component {
                     }
                     res[value.ticker].qty += parseInt(value.qty);
                     res[value.ticker].price += parseFloat(value.price);
+
                     return res;
                   }, {});
 
-                  this.setState({ portfolio: result });
+                  this.setState({ portfolio: result,
+                    portfolioTotal: Math.round(portfolioTotal + parseFloat(tickerPrice))
+                  });
                 }
               });
           
@@ -86,7 +90,7 @@ class Portfolio extends React.Component {
       .then(response => response.json())
       .then(portfolio => {
         if(portfolio.length>1){
-          let sum = portfolio.reduce((a, b) => a.price * a.qty + b.price * b.qty);
+          let sum = portfolio.reduce((a, b) => a.price + b.price);
         
         console.log(portfolio)
         this.setState({ portfolio: portfolio,
@@ -104,7 +108,7 @@ class Portfolio extends React.Component {
   render() {
     const inputs = [
       {
-        id: "ticker",
+        name: "ticker",
         placeholder: "Ticker",
         type: "text",
         divClassName: "col-md-3",
@@ -115,7 +119,7 @@ class Portfolio extends React.Component {
         ariaLabel: "ticker"
       },
       {
-        id: "qty",
+        name: "qty",
         placeholder: "Qty",
         type: "number",
         divClassName: "col-md-3",

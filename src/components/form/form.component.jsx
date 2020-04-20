@@ -7,9 +7,12 @@ export const ReactForm = props => {
   const inputs = props.inputs;
  
   return (
-    <Form onSubmit={event => props.handleSubmit(event, props.state)}>
+    <Form onSubmit={event => {
+      props.handleSubmit(event, props.state)
+      // props.clearFormHendler()
+      }}>
       {inputs.map(input => (
-        <InputGroup key={input.id} className="mb-3">
+        <InputGroup key={input.name} className="mb-3">
           <InputGroup.Prepend>
             <InputGroup.Text
               style={{ backgroundColor: "black" }}
@@ -19,14 +22,14 @@ export const ReactForm = props => {
             </InputGroup.Text>
           </InputGroup.Prepend>
           <FormControl
-            id={input.id}
-            name={input.id}
+            name={input.name}
+            // name={input.id}
             type={input.type}
             placeholder={input.placeholder}
             aria-label={input.ariaLabel}
             aria-describedby={input.inputGroupAddon}
             onChange={input.onChange}
-            // required={input.required}
+            required={input.required}
           />
         </InputGroup>
       ))}
@@ -34,9 +37,7 @@ export const ReactForm = props => {
       {props.errorMessage}
       </Form.Text>
       
-      <Button type="submit" style={{ float: "right" }} variant="dark" onClick={props.signUpHendler}>
-       Sign Up
-      </Button>
+      
       <Button type="submit" style={{ float: "right" }} variant="dark">
         {props.submitButtonText}
       </Button>

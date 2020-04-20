@@ -54,17 +54,17 @@ class App extends React.Component {
   }
   render() {
     return (
-      <>
+      <> {this.state.user?
         <Nav history={this.props} logOutHendler={this.logOutHendler} />
-
+        :null}
       <Switch>
         <Route
           exact
           path="/"
           render={props =>
             !this.state.user ? (
-              // <Redirect to="/login" />
-              null
+               <Redirect to="/login" />
+              
             ) : (
                 <Portfolio logOutHendler={this.logOutHendler}addStockTransaction={this.addStockTransaction}user={this.state.user} {...props} />
             )
@@ -75,11 +75,11 @@ class App extends React.Component {
           exact
           path="/Transactions"
           render={props =>
-            !this.state.user ? (
-             null
-            ) : (
-                <Transactions logOutHendler={this.logOutHendler}user={this.state.user}{...props} />
-            )
+            this.state.user ? (
+              (
+                <Transactions logOutHendler={this.logOutHendler} user={this.state.user}{...props} />
+              )
+            ) : <Redirect to="/login" />
           }
         />
          <Route
