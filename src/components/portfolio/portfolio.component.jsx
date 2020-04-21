@@ -28,8 +28,11 @@ class Portfolio extends React.Component {
       fetch(`http://localhost:3000/stock/${ticker}`)
         .then(response => response.json())
         .then(stock => {
+          console.log(stock)
+          if (!stock.msg || stock['response'][0]['country'] ==='united-states'){
           let price = parseFloat(stock['response'][0]['price']).toFixed(2);
           let change = parseFloat(stock['response'][0]['chg']).toFixed(2);
+          let symbol = stock['response'][0]['symbol']
           let newBalance = this.state.balance - price;
           if (newBalance > 0){
             this.setState({ balance: parseInt(newBalance) });
@@ -37,7 +40,7 @@ class Portfolio extends React.Component {
             fetch("http://localhost:3000/transactions", {
               method: "POST",
               body: JSON.stringify({
-                ticker: ticker,
+                ticker: symbol,
                 qty: qty,
                 user_id: this.props.user.id,
                 price: price,
@@ -55,12 +58,12 @@ class Portfolio extends React.Component {
                   let tickerPrice = responsePortfolio.price;
                   portfolio.reduce(function (res, value) {
                     if (!res[value.ticker]) {
-                      res[value.ticker] = { ticker: value.ticker, qty: 0, price: 0.00 };
+                      res[value.ticker] = { ticker: value.ticker, qty: 0, price: 0.00, change: 0.00 };
                       result.push(res[value.ticker]);
                     }
                     res[value.ticker].qty += parseInt(value.qty);
                     res[value.ticker].price += parseFloat(value.price);
-
+                    res[value.ticker].change += parseFloat(value.change);
                     return res;
                   }, {});
                   this.setState({ 
@@ -71,8 +74,14 @@ class Portfolio extends React.Component {
                   });
                 }
               });
+          }}
+          else{
+            this.setState({
+              errorMessage: "Not valid ticker!",
+            })
           }
         })
+
     };
   
   componentDidMount() {
@@ -84,6 +93,7 @@ class Portfolio extends React.Component {
     })
       .then(response => response.json())
       .then(portfolio => {
+        console.log(portfolio)
         if(portfolio.length>1){
           let sum = 0;
           portfolio.forEach(el => sum += el.price);
