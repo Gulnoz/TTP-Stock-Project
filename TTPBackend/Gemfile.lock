@@ -204,7 +204,7 @@ DEPENDENCIES
   activesupport (~> 6.0, >= 6.0.2.1)
   bcrypt (~> 3.1.7)
   bootsnap (>= 1.4.2)
-  bundler (~> 2.1, >= 2.1.4)
+  bundler (~> 2.0, >= 2.0)
   byebug
   dotenv-rails
   fast_jsonapi
@@ -223,7 +223,7 @@ DEPENDENCIES
   tzinfo-data
 
 RUBY VERSION
-   ruby 2.6.1p33
+   ruby 2.6.3p62
 
 BUNDLED WITH
-   2.1.4
+   2.0.2
