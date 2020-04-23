@@ -25,7 +25,7 @@ class Portfolio extends React.Component {
     handleSubmit = (event, data) => {
       event.preventDefault();
       const { ticker, qty } = this.state;
-      fetch(`http://localhost:3000/stock/${ticker}`)
+      fetch(`https://user-stock-backend.herokuapp.com/stock/${ticker}`)
         .then(response => response.json())
         .then(stock => {
           console.log(stock)
@@ -37,7 +37,7 @@ class Portfolio extends React.Component {
           if (newBalance > 0){
             this.setState({ balance: parseInt(newBalance) });
           
-            fetch("http://localhost:3000/transactions", {
+            fetch("https://user-stock-backend.herokuapp.com/transactions", {
               method: "POST",
               body: JSON.stringify({
                 ticker: symbol,
@@ -88,7 +88,7 @@ class Portfolio extends React.Component {
     const { id, attributes } = this.props.user;
     const { balance } = attributes;
     this.setState({ balance: balance });
-    fetch(`http://localhost:3000/portfolio/${id}`, {
+    fetch(`https://user-stock-backend.herokuapp.com/portfolio/${id}`, {
       method: "GET"
     })
       .then(response => response.json())
