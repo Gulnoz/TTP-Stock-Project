@@ -21,7 +21,7 @@ class App extends React.Component {
   }
   componentWillMount() {
     if (localStorage.getItem("currentUserToken")) {
-      fetch("http://localhost:3000/auth", {
+      fetch("https://user-stock-backend.herokuapp.com/auth", {
         method: "GET",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("currentUserToken")}`

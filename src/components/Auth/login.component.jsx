@@ -20,7 +20,7 @@ class Login extends React.Component {
     handleSubmit = (event, data) => {
       event.preventDefault();
       const { email, password } = data;
-      fetch("http://localhost:3000/login", {
+      fetch("https://user-stock-backend.herokuapp.com/login", {
         method: "POST",
         body: JSON.stringify({
           email: email,
@@ -52,7 +52,7 @@ class Login extends React.Component {
     event.preventDefault();
     const { name, email, password, password2 } = data;
     if(password===password2){
-    fetch('http://localhost:3000/users',
+      fetch('https://user-stock-backend.herokuapp.com/users',
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
