@@ -1,6 +1,6 @@
 # TTP-Stock-Project
 
-## Deployed poject on heroku: https://ttp-stock-transaction.herokuapp.com/
+## Deployed poject on Heroku: https://ttp-stock-transaction.herokuapp.com
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
