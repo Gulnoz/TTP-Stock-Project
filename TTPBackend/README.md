@@ -1,6 +1,6 @@
 # TTPBackend
 
-Clone this repo.
+## Deployed project on Heroku: https://user-stock-backend.herokuapp.com
 
 This application was built using Ruby on Rails and PostgreSQL
 
