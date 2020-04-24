@@ -28,7 +28,6 @@ class Portfolio extends React.Component {
       fetch(`https://user-stock-backend.herokuapp.com/stock/${ticker}`)
         .then(response => response.json())
         .then(stock => {
-          console.log(stock)
           if (!stock.msg || stock['response'][0]['country'] ==='united-states'){
           let price = parseFloat(stock['response'][0]['price']).toFixed(2);
           let change = parseFloat(stock['response'][0]['chg']).toFixed(2);
@@ -93,7 +92,6 @@ class Portfolio extends React.Component {
     })
       .then(response => response.json())
       .then(portfolio => {
-        console.log(portfolio)
         if(portfolio.length>1){
           let sum = 0;
           portfolio.forEach(el => sum += el.price);
@@ -104,7 +102,7 @@ class Portfolio extends React.Component {
         } else if (portfolio.length > 0) {
             this.setState({
               portfolio: portfolio,
-              portfolioTotal: portfolio[0].price
+              portfolioTotal: Math.round(portfolio[0].price)
             })
           }
       }); 
